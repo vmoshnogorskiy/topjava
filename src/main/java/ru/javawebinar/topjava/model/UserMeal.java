@@ -26,4 +26,22 @@ public class UserMeal {
     public int getCalories() {
         return calories;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UserMeal userMeal = (UserMeal) o;
+
+        if (calories != userMeal.calories) return false;
+        return dateTime.equals(userMeal.dateTime);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = dateTime.hashCode();
+        result = 31 * result + calories;
+        return result;
+    }
 }
