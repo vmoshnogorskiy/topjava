@@ -1,16 +1,12 @@
 package ru.javawebinar.topjava.util;
 
-        import ru.javawebinar.topjava.model.UserMeal;
-        import ru.javawebinar.topjava.model.UserMealWithExcess;
+import ru.javawebinar.topjava.model.UserMeal;
+import ru.javawebinar.topjava.model.UserMealWithExcess;
 
-        import java.time.LocalDate;
-        import java.time.LocalDateTime;
-        import java.time.LocalTime;
-        import java.time.Month;
-        import java.util.*;
-        import java.util.stream.Collectors;
-
-        import static ru.javawebinar.topjava.util.TimeUtil.isBetweenHalfOpen;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.Month;
+import java.util.*;
 
 public class UserMealsUtil {
     public static void main(String[] args) {
