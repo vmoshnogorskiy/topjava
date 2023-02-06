@@ -13,17 +13,11 @@ public class MealTo {
 
     private final boolean excess;
 
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
     public MealTo(LocalDateTime dateTime, String description, int calories, boolean excess) {
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;
         this.excess = excess;
-    }
-
-    public String getStringDateTime() {
-        return dateTime.format(formatter);
     }
 
     public LocalTime getTime() {
@@ -49,7 +43,7 @@ public class MealTo {
     @Override
     public String toString() {
         return "MealTo{" +
-                "dateTime=" + getStringDateTime() +
+                "dateTime=" + dateTime +
                 ", description='" + description + '\'' +
                 ", calories=" + calories +
                 ", excess=" + excess +
