@@ -24,7 +24,7 @@
                 <c:when test="${meal.excess}"> <tr style="color: red"> </c:when>
                 <c:otherwise><tr style="color: green"></c:otherwise>
             </c:choose>
-            <td>${meal.stringDateTime}</td>
+            <td>${meal.dateTime}</td>
             <td>${meal.description}</td>
             <td>${meal.calories}</td>
             </tr>
