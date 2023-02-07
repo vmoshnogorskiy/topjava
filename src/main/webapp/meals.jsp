@@ -9,11 +9,15 @@
 <hr>
 <h2>Meals</h2>
 <section>
+    <a href="meals?action=add">Add Meal </a>
+    <br>
     <table border="1" cellpadding="8" cellspacing="0">
         <tr>
             <th>Date</th>
             <th>Description</th>
             <th>Calories</th>
+            <th></th>
+            <th></th>
         </tr>
         <jsp:useBean id="formatter" scope="request" type="java.time.format.DateTimeFormatter"/>
         <jsp:useBean id="mealsList" scope="request" type="java.util.List"/>
@@ -26,6 +30,8 @@
             <td>${meal.dateTime.format(formatter)}</td>
             <td>${meal.description}</td>
             <td>${meal.calories}</td>
+            <td><a href="meals?id=${meal.id}&action=delete">Delete</a></td>
+            <td><a href="meals?id=${meal.id}&action=edit">Edit</a></td>
             </tr>
         </c:forEach>
     </table>
