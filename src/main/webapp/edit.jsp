@@ -10,7 +10,7 @@
 <html>
 <head>
     <jsp:useBean id="meal" scope="request" type="ru.javawebinar.topjava.model.Meal"/>
-    <title>Edit meal ${meal.description}</title>
+    <title> Edit meal ${meal.description} </title>
 </head>
 <body>
 <section>
@@ -18,7 +18,7 @@
         <input type="hidden" name="id" value="${meal.id}">
         DateTime: <input type="datetime-local" name="datetime" value="<c:out value="${meal.dateTime}" />"/> <br/>
         Description: <input type="text" name="description" value="<c:out value="${meal.description}" />"/> <br/>
-        Calories: <input type="text" name="calories" value="<c:out value="${meal.calories}" />"/> <br/>
+        Calories: <input type="number" name="calories" value="<c:out value="${meal.calories}" />"/> <br/>
         <button type="submit">Сохранить</button>
         <button onclick="window.history.back()">Отменить</button>
     </form>

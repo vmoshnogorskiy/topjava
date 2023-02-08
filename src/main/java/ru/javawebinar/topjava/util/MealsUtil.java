@@ -10,8 +10,12 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MealsUtil {
+
     public static final Filter filter = new FilteredMealTo();
+
     public static final int CALORIES_PER_DAY = 2000;
+
+    public static final Meal EMPTY = new Meal(LocalDateTime.now());
 
     public static List<Meal> getMeals() {
         return Arrays.asList(

@@ -8,6 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Meal {
 
     private Integer id;
+
     private LocalDateTime dateTime;
 
     private String description;
@@ -16,9 +17,8 @@ public class Meal {
 
     private static final AtomicInteger atomicCounter = new AtomicInteger();
 
-    public static final Meal EMPTY = new Meal();
-
-    public Meal() {
+    public Meal(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
     }
 
     public Meal(LocalDateTime dateTime, String description, int calories) {
@@ -66,6 +66,5 @@ public class Meal {
 
     private static Integer generateId() {
         return atomicCounter.incrementAndGet();
-
     }
 }
