@@ -8,12 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
 public class MealStorageCollection implements MealStorage {
 
     private static final Logger log = getLogger(MealStorageCollection.class);
+
+    private static final AtomicInteger atomicCounter = new AtomicInteger();
 
     protected final ConcurrentMap<Integer, Meal> storage = new ConcurrentHashMap<>();
 
@@ -23,8 +26,9 @@ public class MealStorageCollection implements MealStorage {
 
     @Override
     public Meal create(Meal meal) {
-        log.info("Saving meal " + meal.getId());
-        storage.put(meal.getId(), meal);
+        log.info("Create meal");
+        Integer newId = generateId();
+        storage.put(newId, new Meal(newId, meal.getDateTime(), meal.getDescription(), meal.getCalories()));
         return meal;
     }
 
@@ -35,11 +39,15 @@ public class MealStorageCollection implements MealStorage {
     }
 
     @Override
-    public Meal update(Meal meal) {
+    public Meal update(Integer id, Meal meal) {
         log.info("Updating meal " + meal.getId());
-        if(!(storage.get(meal.getId()) == null)) {
-            storage.put(meal.getId(), new Meal(meal.getDateTime(), meal.getDescription(), meal.getCalories()));
-            return meal;
+        Meal oldMeal = storage.get(id);
+        if (oldMeal != null) {
+            oldMeal.setDateTime(meal.getDateTime());
+            oldMeal.setDescription(meal.getDescription());
+            oldMeal.setCalories(meal.getCalories());
+            storage.put(id, oldMeal);
+            return oldMeal;
         }
         return null;
     }
@@ -60,5 +68,10 @@ public class MealStorageCollection implements MealStorage {
         for (Meal meal : MealsUtil.getMeals()) {
             storage.put(meal.getId(), meal);
         }
+    }
+
+    @Override
+    public Integer generateId() {
+        return atomicCounter.incrementAndGet();
     }
 }

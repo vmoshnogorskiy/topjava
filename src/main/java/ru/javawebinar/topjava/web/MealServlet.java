@@ -36,7 +36,7 @@ public class MealServlet extends HttpServlet {
         String action = request.getParameter("action");
         if (action == null) {
             log.debug("redirect to meals");
-            request.setAttribute("mealsList",  MealsUtil.filteredByStreams(storage.getAll(),
+            request.setAttribute("mealsList", MealsUtil.filteredByStreams(storage.getAll(),
                     LocalTime.MIN,
                     LocalTime.MAX,
                     MealsUtil.CALORIES_PER_DAY));
@@ -72,19 +72,13 @@ public class MealServlet extends HttpServlet {
         String id = request.getParameter("id");
         LocalDateTime dateTime = LocalDateTime.parse(request.getParameter("datetime"));
         String description = request.getParameter("description");
-        String calories = request.getParameter("calories");
+        int calories = Integer.parseInt(request.getParameter("calories"));
         final boolean isCreate = (id == null || id.length() == 0);
 
-        Meal m;
         if (isCreate) {
-            m = new Meal(dateTime, description, Integer.parseInt(calories));
-            storage.create(m);
+            storage.create(new Meal(null, dateTime, description, calories));
         } else {
-            m = storage.get(Integer.parseInt(id));
-            m.setDateTime(dateTime);
-            m.setDescription(description);
-            m.setCalories(Integer.parseInt(calories));
-            storage.update(m);
+            storage.update(Integer.parseInt(id), new Meal(Integer.parseInt(id), dateTime, description, calories));
         }
         response.sendRedirect("meals");
     }
