@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.storage.MealStorage;
 import ru.javawebinar.topjava.storage.MealStorageCollection;
 import ru.javawebinar.topjava.util.MealsUtil;
 
@@ -20,28 +21,26 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class MealServlet extends HttpServlet {
     private static final Logger log = getLogger(MealServlet.class);
 
-    private MealStorageCollection storage;
+    private MealStorage storage;
 
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         storage = new MealStorageCollection();
-        storage.createStorageData();
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         String action = request.getParameter("action");
         if (action == null) {
             log.debug("redirect to meals");
-            request.setAttribute("mealsList",  MealsUtil.filter.filteredByStreams(storage.getAll(),
+            request.setAttribute("mealsList",  MealsUtil.filteredByStreams(storage.getAll(),
                     LocalTime.MIN,
                     LocalTime.MAX,
                     MealsUtil.CALORIES_PER_DAY));
-            request.setAttribute("formatter", formatter);
+            request.setAttribute("formatter", FORMATTER);
             request.getRequestDispatcher("/meals.jsp").forward(request, response);
             return;
         }
@@ -64,8 +63,8 @@ public class MealServlet extends HttpServlet {
                 response.sendRedirect("meals");
         }
         request.setAttribute("meal", m);
-        request.setAttribute("formatter", formatter);
-        request.getRequestDispatcher("/edit.jsp").forward(request, response);
+        request.setAttribute("formatter", FORMATTER);
+        request.getRequestDispatcher("/edit_meal.jsp").forward(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

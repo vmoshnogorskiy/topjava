@@ -17,10 +17,8 @@ public class MealStorageCollection implements MealStorage {
 
     protected final ConcurrentMap<Integer, Meal> storage = new ConcurrentHashMap<>();
 
-    public void createStorageData() {
-        for (Meal meal : MealsUtil.getMeals()) {
-            storage.put(meal.getId(), meal);
-        }
+    public MealStorageCollection() {
+        createStorageData();
     }
 
     @Override
@@ -39,8 +37,11 @@ public class MealStorageCollection implements MealStorage {
     @Override
     public Meal update(Meal meal) {
         log.info("Updating meal " + meal.getId());
-        storage.put(meal.getId(), new Meal(meal.getDateTime(), meal.getDescription(), meal.getCalories()));
-        return meal;
+        if(!(storage.get(meal.getId()) == null)) {
+            storage.put(meal.getId(), new Meal(meal.getDateTime(), meal.getDescription(), meal.getCalories()));
+            return meal;
+        }
+        return null;
     }
 
     @Override
@@ -53,5 +54,11 @@ public class MealStorageCollection implements MealStorage {
     public List<Meal> getAll() {
         log.info("Get all stored meals");
         return new ArrayList<>(storage.values());
+    }
+
+    private void createStorageData() {
+        for (Meal meal : MealsUtil.getMeals()) {
+            storage.put(meal.getId(), meal);
+        }
     }
 }
