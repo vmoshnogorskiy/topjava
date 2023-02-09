@@ -15,8 +15,8 @@ public class Meal {
     private int calories;
 
 
-    public Meal(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public Meal() {
+
     }
 
     public Meal(Integer id, LocalDateTime dateTime, String description, int calories) {

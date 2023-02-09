@@ -12,15 +12,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
-public class MealStorageCollection implements MealStorage {
+public class CollectionMealStorage implements MealStorage {
 
-    private static final Logger log = getLogger(MealStorageCollection.class);
+    private static final Logger log = getLogger(CollectionMealStorage.class);
 
     private static final AtomicInteger atomicCounter = new AtomicInteger();
 
-    protected final ConcurrentMap<Integer, Meal> storage = new ConcurrentHashMap<>();
+    private final ConcurrentMap<Integer, Meal> storage = new ConcurrentHashMap<>();
 
-    public MealStorageCollection() {
+    public CollectionMealStorage() {
         createStorageData();
     }
 
@@ -34,27 +34,20 @@ public class MealStorageCollection implements MealStorage {
 
     @Override
     public Meal get(int id) {
-        log.info("Get meal by id " + id);
+        log.info("Get meal by id {}", id);
         return storage.get(id);
     }
 
     @Override
-    public Meal update(Integer id, Meal meal) {
-        log.info("Updating meal " + meal.getId());
-        Meal oldMeal = storage.get(id);
-        if (oldMeal != null) {
-            oldMeal.setDateTime(meal.getDateTime());
-            oldMeal.setDescription(meal.getDescription());
-            oldMeal.setCalories(meal.getCalories());
-            storage.put(id, oldMeal);
-            return oldMeal;
-        }
-        return null;
+    public Meal update(Meal meal) {
+        log.info("Updating meal {}", meal.getId());
+        Meal oldMeal = storage.get(meal.getId());
+        return storage.replace(meal.getId(), oldMeal, meal) ? meal : null;
     }
 
     @Override
     public void delete(int id) {
-        log.info("Removing meal by id " + id);
+        log.info("Removing meal by id {}", id);
         storage.remove(id);
     }
 
@@ -66,12 +59,11 @@ public class MealStorageCollection implements MealStorage {
 
     private void createStorageData() {
         for (Meal meal : MealsUtil.getMeals()) {
-            storage.put(meal.getId(), meal);
+            create(meal);
         }
     }
 
-    @Override
-    public Integer generateId() {
+    private Integer generateId() {
         return atomicCounter.incrementAndGet();
     }
 }

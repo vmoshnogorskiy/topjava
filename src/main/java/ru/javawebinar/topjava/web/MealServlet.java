@@ -3,7 +3,7 @@ package ru.javawebinar.topjava.web;
 import org.slf4j.Logger;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.storage.MealStorage;
-import ru.javawebinar.topjava.storage.MealStorageCollection;
+import ru.javawebinar.topjava.storage.CollectionMealStorage;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 import javax.servlet.ServletConfig;
@@ -21,14 +21,14 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class MealServlet extends HttpServlet {
     private static final Logger log = getLogger(MealServlet.class);
 
-    private MealStorage storage;
-
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+    private MealStorage storage;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        storage = new MealStorageCollection();
+        storage = new CollectionMealStorage();
     }
 
     @Override
@@ -51,16 +51,15 @@ public class MealServlet extends HttpServlet {
                 response.sendRedirect("meals");
                 return;
             case "add":
-                m = MealsUtil.EMPTY;
-                request.setAttribute("action", action);
+                m = MealsUtil.empty;
+                m.setDateTime(LocalDateTime.now());
                 break;
             case "edit":
                 m = storage.get(Integer.parseInt(request.getParameter("id")));
-                request.setAttribute("action", action);
                 break;
             default:
-                m = MealsUtil.EMPTY;
                 response.sendRedirect("meals");
+                return;
         }
         request.setAttribute("meal", m);
         request.setAttribute("formatter", FORMATTER);
@@ -78,7 +77,7 @@ public class MealServlet extends HttpServlet {
         if (isCreate) {
             storage.create(new Meal(null, dateTime, description, calories));
         } else {
-            storage.update(Integer.parseInt(id), new Meal(Integer.parseInt(id), dateTime, description, calories));
+            storage.update(new Meal(Integer.parseInt(id), dateTime, description, calories));
         }
         response.sendRedirect("meals");
     }

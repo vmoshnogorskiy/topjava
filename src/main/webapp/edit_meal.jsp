@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<jsp:useBean id="formatter" scope="request" type="java.time.format.DateTimeFormatter"/>
 <html>
 <head>
     <jsp:useBean id="meal" scope="request" type="ru.javawebinar.topjava.model.Meal"/>
@@ -12,7 +13,7 @@
     <h2>${meal.id == null ? 'Add meal' : 'Edit meal'}</h2>
     <form method="post" action="meals" enctype="application/x-www-form-urlencoded">
         <input type="hidden" name="id" value="${meal.id}">
-        DateTime: <input type="datetime-local" name="datetime" value="${meal.dateTime}"/> <br/>
+        DateTime: <input type="datetime-local" name="datetime" value="${meal.dateTime.format(formatter)}"/> <br/>
         Description: <input type="text" name="description" value="${meal.description}"/> <br/>
         Calories: <input type="number" name="calories" value="${meal.calories}"/> <br/>
         <button type="submit">Сохранить</button>
