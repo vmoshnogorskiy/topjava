@@ -27,7 +27,7 @@ public class InMemoryUserRepository implements UserRepository {
     @Override
     public User save(User user) {
         log.info("save {}", user);
-        if(user.isNew()) {
+        if (user.isNew()) {
             user.setId(counter.incrementAndGet());
             repository.put(user.getId(), user);
             return user;
@@ -52,7 +52,7 @@ public class InMemoryUserRepository implements UserRepository {
     @Override
     public User getByEmail(String email) {
         log.info("getByEmail {}", email);
-         Optional<User> requiredUser = repository.values().stream()
+        Optional<User> requiredUser = repository.values().stream()
                 .filter(user -> email.equals(user.getEmail()))
                 .findFirst();
         return requiredUser.orElse(null);
