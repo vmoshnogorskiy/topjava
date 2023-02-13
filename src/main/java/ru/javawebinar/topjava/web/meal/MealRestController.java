@@ -11,6 +11,7 @@ import java.util.List;
 
 import static ru.javawebinar.topjava.util.ValidationUtil.assureIdConsistent;
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNew;
+import static ru.javawebinar.topjava.web.SecurityUtil.authUserId;
 
 @Controller
 public class MealRestController {
@@ -18,30 +19,30 @@ public class MealRestController {
     @Autowired
     private MealService service;
 
-    public List<Meal> getAll(Integer userId) {
+    public List<Meal> getAll() {
         log.info("getAll");
-        return service.getAll(userId);
+        return service.getAll(authUserId());
     }
 
-    public Meal get(int id, Integer userId) {
+    public Meal get(int id) {
         log.info("get {}", id);
-        return service.get(id, userId);
+        return service.get(id, authUserId());
     }
 
-    public Meal create(Meal meal, Integer userId) {
+    public Meal create(Meal meal) {
         log.info("create {}", meal);
         checkNew(meal);
-        return service.create(meal, userId);
+        return service.create(meal, authUserId());
     }
 
-    public void delete(int id, Integer userId) {
+    public void delete(int id) {
         log.info("delete {}", id);
-        service.delete(id, userId);
+        service.delete(id, authUserId());
     }
 
-    public void update(Meal meal, int id, Integer userId) {
+    public void update(Meal meal, int id) {
         log.info("update {} with id={}", meal, id);
         assureIdConsistent(meal, id);
-        service.update(meal, userId);
+        service.update(meal, authUserId());
     }
 }
