@@ -1,17 +1,19 @@
 package ru.javawebinar.topjava.web;
 
+import org.springframework.stereotype.Component;
+
 import static ru.javawebinar.topjava.util.MealsUtil.DEFAULT_CALORIES_PER_DAY;
 
+@Component
 public class SecurityUtil {
-
-    private int userId = 1;
+    private static int userId = 1;
 
     public static int authUserId() {
-        return 1;
+        return userId;
     }
 
     public void setAuthUserId(int userId) {
-        this.userId = userId;
+        SecurityUtil.userId = userId;
     }
 
     public static int authUserCaloriesPerDay() {
