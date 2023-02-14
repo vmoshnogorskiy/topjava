@@ -21,8 +21,44 @@
     <h3><a href="index.html">Home</a></h3>
     <hr/>
     <h2>Meals</h2>
+       <br><br>
+    <form method="get" action="meals">
+        <input type="hidden" name="action" value="dateTimeFilter">
+        <dl>
+            <dt>DateFrom:</dt>
+            <dd>
+                <label>
+                    <input type="date" name="dateFrom" required>
+                </label>
+            </dd>
+        </dl>
+        <dl>
+            <dt>DateTo:</dt>
+            <dd>
+                <label>
+                    <input type="date" name="dateTo" required>
+                </label>
+            </dd>
+        </dl>
+        <dl>
+            <dt>TimeFrom:</dt>
+            <dd>
+                <label>
+                    <input type="time" name="timeFrom" required>
+                </label>
+            </dd>
+        </dl>
+        <dl>
+            <dt>TimeTo:</dt>
+            <dd>
+                <label>
+                    <input type="time" name="timeTo" required>
+                </label>
+            </dd>
+        </dl>
+        <button type="submit">Execute Date Filter</button>
+    </form>
     <a href="meals?action=create">Add Meal</a>
-    <br><br>
     <table border="1" cellpadding="8" cellspacing="0">
         <thead>
         <tr>
