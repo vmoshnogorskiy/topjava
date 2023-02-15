@@ -21,10 +21,9 @@ public class UserServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        request.setCharacterEncoding("UTF-8");
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String userNum = request.getParameter("users");
         SecurityUtil.setAuthUserId(Integer.parseInt(userNum));
-        response.sendRedirect("/topjava/index.html");
+        response.sendRedirect("meals");
     }
 }

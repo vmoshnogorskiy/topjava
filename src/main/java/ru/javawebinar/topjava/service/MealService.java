@@ -34,6 +34,6 @@ public class MealService {
     }
 
     public List<Meal> getAll(Integer userId) {
-        return (List<Meal>) repository.getAll(userId);
+        return repository.getAll(userId);
     }
 }
