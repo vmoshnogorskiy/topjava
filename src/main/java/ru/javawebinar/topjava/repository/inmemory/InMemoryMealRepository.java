@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class InMemoryMealRepository implements MealRepository {
 
     private static final Comparator<Meal> MEAL_COMPARATOR = Comparator.comparing(Meal::getDateTime).reversed();
-    private final Map<Integer,Meal> repository = new ConcurrentHashMap<>();
+    private final Map<Integer, Map<Integer, Meal>> repository = new ConcurrentHashMap<>();
     private final AtomicInteger counter = new AtomicInteger(0);
 
     {
@@ -26,29 +26,34 @@ public class InMemoryMealRepository implements MealRepository {
         meal.setUserId(userId);
         if (meal.isNew()) {
             meal.setId(counter.incrementAndGet());
-            repository.put(userId, meal);
+            if (repository.get(userId) != null) {
+                repository.get(userId).put(meal.getId(), meal);
+            } else {
+                Map<Integer, Meal> mealMap = new ConcurrentHashMap<>();
+                mealMap.put(meal.getId(), meal);
+                repository.put(userId, mealMap);
+            }
             return meal;
         }
         // handle case: update, but not present in storage
-        return repository.computeIfPresent(userId, (id, oldMeal) -> oldMeal.getUserId() == userId ? meal : oldMeal);
+        return repository.get(userId).computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
     }
 
     @Override
     public boolean delete(int id, int userId) {
-        Meal storedMeal = repository.get(id);
-        return userId == storedMeal.getUserId() && repository.remove(id) != null;
+        return repository.get(userId) != null && repository.get(userId).remove(id) != null;
     }
 
     @Override
     public Meal get(int id, int userId) {
-        Meal storedMeal = repository.get(id);
-        return storedMeal != null && storedMeal.getUserId().equals(userId) ? storedMeal : null;
+        return repository.get(userId) != null ? repository.get(userId).get(id) : null;
     }
 
     @Override
     public List<Meal> getAll(int userId) {
-        return repository.values().stream()
-                .filter(meal -> userId == meal.getUserId())
+        return repository.get(userId)
+                .values()
+                .stream()
                 .sorted(MEAL_COMPARATOR)
                 .collect(Collectors.toList());
     }
