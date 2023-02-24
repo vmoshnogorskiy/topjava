@@ -18,6 +18,8 @@ public class MealTestData {
     public static final int USER_MEAL_ID_5 = START_SEQ + 7;
     public static final int USER_MEAL_ID_6 = START_SEQ + 8;
     public static final int USER_MEAL_ID_7 = START_SEQ + 9;
+    public static final int ADMIN_MEAL_ID_1 = START_SEQ + 10;
+    public static final int ADMIN_MEAL_ID_2 = START_SEQ + 11;
     public static final int NOT_FOUND = 10;
 
     public static final Meal userMeal1 = new Meal(USER_MEAL_ID_1,
@@ -34,6 +36,10 @@ public class MealTestData {
             LocalDateTime.of(2023, Month.FEBRUARY, 3, 7, 10), "Завтрак 1", 800);
     public static final Meal userMeal7 = new Meal(USER_MEAL_ID_7,
             LocalDateTime.of(2023, Month.FEBRUARY, 3, 9, 50), "Завтрак 2", 250);
+    public static final Meal adminMeal1 = new Meal(ADMIN_MEAL_ID_1,
+            LocalDateTime.of(2023, Month.JANUARY, 30, 7, 10), "Завтрак 1", 800);
+    public static final Meal adminMeal2 = new Meal(ADMIN_MEAL_ID_2,
+            LocalDateTime.of(2023, Month.JANUARY, 30, 9, 50), "Завтрак 2", 470);
     public static final Meal duplicateMeal = new Meal(null, userMeal2.getDateTime(), "перекус", 180);
 
     public static void assertMatch(Meal actual, Meal expected) {

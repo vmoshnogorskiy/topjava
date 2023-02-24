@@ -18,6 +18,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 import static ru.javawebinar.topjava.MealTestData.*;
+import static ru.javawebinar.topjava.MealTestData.NOT_FOUND;
 import static ru.javawebinar.topjava.MealTestData.assertMatch;
 import static ru.javawebinar.topjava.UserTestData.*;
 
@@ -43,6 +44,11 @@ public class MealServiceTest {
     }
 
     @Test
+    public void getNotExist() {
+        assertThrows(NotFoundException.class, () -> service.get(NOT_FOUND, USER_ID));
+    }
+
+    @Test
     public void getNotOwnerMeal() {
         assertThrows(NotFoundException.class, () -> service.get(USER_MEAL_ID_1, ADMIN_ID));
     }
@@ -55,7 +61,7 @@ public class MealServiceTest {
 
     @Test
     public void deletedNotFound() {
-        assertThrows(NotFoundException.class, () -> service.delete(MealTestData.NOT_FOUND, USER_ID));
+        assertThrows(NotFoundException.class, () -> service.delete(NOT_FOUND, USER_ID));
     }
 
     @Test
@@ -70,6 +76,15 @@ public class MealServiceTest {
                 LocalDate.of(2023, 1, 30),
                 USER_ID);
         MealTestData.assertMatch(allFiltered, userMeal4, userMeal3, userMeal2, userMeal1);
+    }
+
+    @Test
+    public void getBetweenInclusiveWithoutRestrictions() {
+        List<Meal> allFiltered = service.getBetweenInclusive(
+                null,
+                null,
+                ADMIN_ID);
+        MealTestData.assertMatch(allFiltered, adminMeal2, adminMeal1);
     }
 
     @Test
