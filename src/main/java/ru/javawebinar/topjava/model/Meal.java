@@ -11,7 +11,10 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @NamedQueries({
-        @NamedQuery(name = Meal.DELETE, query = "DELETE FROM Meal m WHERE m.id = :id"),
+        @NamedQuery(name = Meal.DELETE, query = "DELETE FROM Meal m WHERE m.id = :id AND m.user.id = :userid"),
+        @NamedQuery(name = Meal.UPDATE, query =
+                "UPDATE Meal m SET m.dateTime=:date_time, m.description = :description, m.calories = :calories " +
+                        "WHERE m.id = :id AND m.user.id = :userid"),
         @NamedQuery(name = Meal.GET, query = "SELECT m FROM Meal m WHERE m.id = :id AND m.user.id = :userid"),
         @NamedQuery(name = Meal.ALL_SORTED, query = "SELECT m FROM Meal m WHERE m.user.id = :userid ORDER BY m.dateTime DESC"),
         @NamedQuery(name = Meal.WITH_DATE_FILTER, query = "SELECT m FROM Meal m WHERE m.user.id = :userid " +
@@ -21,6 +24,7 @@ import java.time.LocalTime;
 @Table(name = "meal", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "date_time"}, name = "uk_user_datetime")})
 public class Meal extends AbstractBaseEntity {
     public static final String DELETE = "Meal.delete";
+    public static final String UPDATE = "Meal.update";
     public static final String GET = "Meal.get";
     public static final String ALL_SORTED = "Meal.getAllSorted";
     public static final String WITH_DATE_FILTER = "Meal.withDateFilter";
