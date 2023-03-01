@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.repository.jpa;
 
-import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.Meal;
@@ -11,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.function.Supplier;
 
 @Repository
 @Transactional(readOnly = true)
@@ -28,8 +28,7 @@ public class JpaMealRepository implements MealRepository {
             em.persist(meal);
             return meal;
         } else {
-            Meal oldMeal = em.find(Meal.class, meal.getId());
-            return oldMeal.getUser().getId() == userId ? em.merge(meal) : null;
+            return findMeal(meal.getId(), userId, () -> em.merge(meal));
         }
     }
 
@@ -44,11 +43,7 @@ public class JpaMealRepository implements MealRepository {
 
     @Override
     public Meal get(int id, int userId) {
-        List<Meal> meals = em.createNamedQuery(Meal.GET, Meal.class)
-                .setParameter("id", id)
-                .setParameter("userid", userId)
-                .getResultList();
-        return DataAccessUtils.singleResult(meals);
+        return findMeal(id, userId, () -> em.find(Meal.class, id));
     }
 
     @Override
@@ -65,5 +60,10 @@ public class JpaMealRepository implements MealRepository {
                 .setParameter("startDateTime", startDateTime)
                 .setParameter("endDateTime", endDateTime)
                 .getResultList();
+    }
+
+    private Meal findMeal(int id, int userId, Supplier<Meal> supplier) {
+        Meal meal = em.find(Meal.class, id);
+        return meal != null && meal.getUser().getId() == userId ? supplier.get() : null;
     }
 }
