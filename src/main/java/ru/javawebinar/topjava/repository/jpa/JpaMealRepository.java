@@ -10,7 +10,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.function.Supplier;
 
 @Repository
 @Transactional(readOnly = true)
@@ -28,7 +27,7 @@ public class JpaMealRepository implements MealRepository {
             em.persist(meal);
             return meal;
         } else {
-            return findMeal(meal.getId(), userId, () -> em.merge(meal));
+            return get(meal.getId(), userId) != null ? em.merge(meal) : null;
         }
     }
 
@@ -43,7 +42,8 @@ public class JpaMealRepository implements MealRepository {
 
     @Override
     public Meal get(int id, int userId) {
-        return findMeal(id, userId, () -> em.find(Meal.class, id));
+        Meal meal = em.find(Meal.class, id);
+        return meal != null && meal.getUser().getId() == userId ? meal : null;
     }
 
     @Override
@@ -60,10 +60,5 @@ public class JpaMealRepository implements MealRepository {
                 .setParameter("startDateTime", startDateTime)
                 .setParameter("endDateTime", endDateTime)
                 .getResultList();
-    }
-
-    private Meal findMeal(int id, int userId, Supplier<Meal> supplier) {
-        Meal meal = em.find(Meal.class, id);
-        return meal != null && meal.getUser().getId() == userId ? supplier.get() : null;
     }
 }
