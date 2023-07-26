@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.to;
 
 import java.beans.ConstructorProperties;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class MealTo {
     private final Integer id;
@@ -50,18 +51,19 @@ public class MealTo {
 
         MealTo mealTo = (MealTo) o;
 
-        if (calories != mealTo.calories) return false;
-        if (excess != mealTo.excess) return false;
-        if (!id.equals(mealTo.id)) return false;
-        if (!dateTime.equals(mealTo.dateTime)) return false;
-        return description.equals(mealTo.description);
+        if (calories != mealTo.calories
+                || excess != mealTo.excess
+                || !Objects.equals(id, mealTo.id)
+                || !Objects.equals(dateTime, mealTo.dateTime)
+        ) return false;
+        return Objects.equals(description, mealTo.description);
     }
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + dateTime.hashCode();
-        result = 31 * result + description.hashCode();
+        int result = Objects.hash(id);
+        result = 31 * result + Objects.hash(dateTime);
+        result = 31 * result + Objects.hash(description);
         result = 31 * result + calories;
         result = 31 * result + (excess ? 1 : 0);
         return result;
