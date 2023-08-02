@@ -14,7 +14,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("/meals")
+@RequestMapping("/profile/meals")
 public class MealUIController extends AbstractMealController {
 
     @Override
@@ -33,12 +33,13 @@ public class MealUIController extends AbstractMealController {
     @PostMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void create(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
-                               @RequestParam String description,
-                               @RequestParam int calories) {
+                       @RequestParam String description,
+                       @RequestParam int calories) {
         Meal meal = new Meal(null, dateTime, description, calories);
         super.create(meal);
     }
 
+    @Override
     @GetMapping(value = "/filter", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<MealTo> getBetween(
             @RequestParam @Nullable LocalDate startDate,
