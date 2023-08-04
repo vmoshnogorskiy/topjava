@@ -29,7 +29,7 @@
             <dt><spring:message code="meal.endTime"/>:</dt>
             <dd><input type="time" name="endTime"></dd>
         </dl>
-        <button class="btn btn-primary" onclick="filterMeals()">
+        <button class="btn btn-primary" type="button" onclick="filterMeals()">
             <span class="fa fa-plus"></span>
             <spring:message code="meal.filter"/>
         </button>
