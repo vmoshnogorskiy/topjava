@@ -69,8 +69,8 @@ public class Meal extends AbstractBaseEntity {
         return description;
     }
 
-    public int getCalories() {
-        return calories == null ? 0 : calories;
+    public Integer getCalories() {
+        return calories;
     }
 
     public LocalDate getDate() {
